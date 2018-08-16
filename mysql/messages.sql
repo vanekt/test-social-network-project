@@ -1,3 +1,7 @@
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `test-social-network` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `test-social-network`;
+
 -- phpMyAdmin SQL Dump
 -- version 4.8.2
 -- https://www.phpmyadmin.net/
