@@ -24,6 +24,7 @@ services:
      - ${API_PORT}:4000
     environment:
       PORT: 4000
+      WS_PORT: 8089
       SITEHOST: ${SITEHOST}
       SQL_DB_DSN: "root:root@tcp(db:3306)/test-social-network"
       TOKEN_COOKIE_NAME: auth
