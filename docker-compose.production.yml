@@ -1,0 +1,64 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+    - ./nginx/conf.d.production:/etc/nginx/conf.d
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    - "webapp-code:/var/www/html:ro"
+    ports:
+    - ${APP_PORT}:80
+    links:
+    - api
+    extra_hosts:
+    - outside:172.17.0.1
+
+  api:
+    build: ./api
+    restart: always
+    ports:
+     - ${API_PORT}:4000
+    environment:
+      PORT: 4000
+      WS_PORT: 8089
+      SITEHOST: ${SITEHOST}
+      SQL_DB_DSN: "root:root@tcp(db:3306)/test-social-network"
+      TOKEN_COOKIE_NAME: auth
+      TOKEN_COOKIE_DOMAIN: .${SITEHOST}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+    depends_on:
+      - db
+  db:
+    image: percona:5.7
+    volumes:
+    - mysql-data:/var/lib/mysql
+    - "./mysql/:/docker-entrypoint-initdb.d/"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - ${PHPMYADMIN_PORT}:80
+    links:
+      - db
+
+  webapp:
+    build: ./webapp
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+    volumes:
+      - "webapp-code:/webapp/build"
+
+volumes:
+  mysql-data:
+    driver: local
+  webapp-code:
+    driver: local
