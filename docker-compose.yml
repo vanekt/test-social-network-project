@@ -15,11 +15,11 @@ services:
   api:
     image: golang:1.10.3
     restart: always
-    working_dir: /go/src/vanekt/test-social-network-api
+    working_dir: /go/src/github.com/vanekt/test-social-network-api
     entrypoint: /usr/bin/run.sh
     volumes:
       - ./api/run.sh:/usr/bin/run.sh:ro
-      - ${GOPATH}/src/vanekt/test-social-network-api:/go/src/vanekt/test-social-network-api:ro
+      - ${GOPATH}/src/github.com/vanekt/test-social-network-api:/go/src/github.com/vanekt/test-social-network-api:ro
     ports:
      - ${API_PORT}:4000
     environment:
